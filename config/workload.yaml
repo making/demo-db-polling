@@ -1,0 +1,28 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  labels:
+    app.kubernetes.io/part-of: demo-polling
+    apps.tanzu.vmware.com/workload-type: worker
+  name: demo-polling
+spec:
+  source:
+    git:
+      url: https://github.com/making/demo-db-polling
+      ref:
+        branch: main
+  build:
+    env:
+    - name: BP_JVM_VERSION
+      value: "17"
+  serviceClaims:
+  - name: usage-db
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: usage-db
+  resources:
+    limits:
+      memory: 768Mi
+    requests:
+      memory: 768Mi

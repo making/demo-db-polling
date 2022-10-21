@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usage-db
+  labels:
+    app.kubernetes.io/part-of: usage-db
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: usage-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: usage-db
+    spec:
+      containers:
+      - image: bitnami/postgresql:14
+        name: postgres
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: usage-db
+              key: database
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: usage-db
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: usage-db
+              key: password
+        ports:
+        - containerPort: 5432
+          name: usage-db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: usage-db
+  labels:
+    app.kubernetes.io/part-of: usage-db
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app.kubernetes.io/part-of: usage-db
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: usage-db
+  labels:
+    app.kubernetes.io/part-of: usage-db
+type: servicebinding.io/postgresql
+stringData:
+  type: postgresql
+  host: usage-db
+  port: "5432"
+  username: usage
+  password: usage
+  database: usage
+---
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaim
+metadata:
+  name: usage-db
+spec:
+  ref:
+    apiVersion: v1
+    kind: Secret
+    name: usage-db
