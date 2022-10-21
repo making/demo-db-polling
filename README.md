@@ -46,8 +46,9 @@ tanzu apps workload apply demo-polling \
 ```
 
 ```
-kubectl exec $(kubectl get pod -l app.kubernetes.io/part-of=usage-db -o jsonpath='{.items[0].metadata.name}') -- psql postgresql://usage:usage@usage-db:5432/usage -c "insert into usage(first_name, last_name, minutes, data_usage) values('John', 'Doe', 60, 1000)"
-kubectl exec $(kubectl get pod -l app.kubernetes.io/part-of=usage-db -o jsonpath='{.items[0].metadata.name}') -- psql postgresql://usage:usage@usage-db:5432/usage -c "insert into usage(first_name, last_name, minutes, data_usage) values('Jone', 'Doe', 120, 2200)"
-kubectl exec $(kubectl get pod -l app.kubernetes.io/part-of=usage-db -o jsonpath='{.items[0].metadata.name}') -- psql postgresql://usage:usage@usage-db:5432/usage -c "insert into usage(first_name, last_name, minutes, data_usage) values('Richard', 'Roe', 50, 800)"
-kubectl exec $(kubectl get pod -l app.kubernetes.io/part-of=usage-db -o jsonpath='{.items[0].metadata.name}') -- psql postgresql://usage:usage@usage-db:5432/usage -c "select * from usage"
+POD_NAME=$(kubectl get pod -l app.kubernetes.io/part-of=usage-db -o jsonpath='{.items[0].metadata.name}')
+kubectl exec ${POD_NAME} -- psql postgresql://usage:usage@usage-db:5432/usage -c "insert into usage(first_name, last_name, minutes, data_usage) values('John', 'Doe', 60, 1000)"
+kubectl exec ${POD_NAME} -- psql postgresql://usage:usage@usage-db:5432/usage -c "insert into usage(first_name, last_name, minutes, data_usage) values('Jone', 'Doe', 120, 2200)"
+kubectl exec ${POD_NAME} -- psql postgresql://usage:usage@usage-db:5432/usage -c "insert into usage(first_name, last_name, minutes, data_usage) values('Richard', 'Roe', 50, 800)"
+kubectl exec ${POD_NAME} -- psql postgresql://usage:usage@usage-db:5432/usage -c "select * from usage"
 ```
