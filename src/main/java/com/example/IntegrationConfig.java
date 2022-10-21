@@ -22,7 +22,7 @@ public class IntegrationConfig {
 	@Bean
 	public MessageSource<Object> jdbcMessageSource(DataSource dataSource) {
 		JdbcPollingChannelAdapter jdbcPollingChannelAdapter = new JdbcPollingChannelAdapter(dataSource,
-				"SELECT id, first_name, last_name, minutes, data_usage, created_at FROM usage WHERE seen_at IS NULL ORDER BY id  LIMIT 1000");
+				"SELECT id, first_name, last_name, minutes, data_usage, created_at FROM usage WHERE seen_at IS NULL ORDER BY id LIMIT 1000");
 		jdbcPollingChannelAdapter.setUpdateSql("UPDATE usage SET seen_at = CURRENT_TIMESTAMP WHERE id IN (:id)");
 		jdbcPollingChannelAdapter.setRowMapper(new DataClassRowMapper<>(Usage.class));
 		return jdbcPollingChannelAdapter;
