@@ -1,0 +1,10 @@
+version: "2"
+services:
+  demo-db:
+    image: bitnami/postgresql:14
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_DB: demo
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
