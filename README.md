@@ -5,6 +5,9 @@
 docker-compose up
 ```
 
+```
+./mvn spring-boot:run
+```
 
 ```
 psql postgresql://demo:demo@localhost:5432/demo -c "insert into usage(first_name, last_name, minutes, data_usage) values('John', 'Doe', 60, 1000)"
