@@ -1,6 +1,7 @@
 package com.example;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,9 @@ public class UsageHandler implements MessageHandler {
 
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
+		UUID id = message.getHeaders().getId();
 		@SuppressWarnings("unchecked")
 		List<Usage> usages = (List<Usage>) message.getPayload();
-		usages.forEach(usage -> log.info("process message: {}", usage));
+		usages.forEach(usage -> log.info("[{}] process message: {}", id, usage));
 	}
 }
